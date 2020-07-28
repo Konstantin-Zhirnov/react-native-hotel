@@ -3,7 +3,6 @@ import { LOAD_POSTS, TOGGLE_BOOKED, SET_IS_CLICK, REMOVE_POST, ADD_POST } from '
 const initialState = {
     allPosts: [],
     bookedPosts: [],
-    loading: true,
     isClick: 1
 }
 

@@ -45,10 +45,10 @@ export const CreateScreen = ({ navigation }) => {
         <ScrollView>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>Создать новый пост</Text>
+                    <Text style={styles.title}>Добавить новый номер</Text>
                     <TextInput
                         style={styles.textarea}
-                        placeholder="Введите заголовок"
+                        placeholder="Введите название"
                         value={title}
                         onChangeText={setTitle}
                         multiline
@@ -62,7 +62,7 @@ export const CreateScreen = ({ navigation }) => {
                     />
                     <PhotoPicker onPick={photoPickHandler} />
                     <Button
-                        title="Создать пост"
+                        title="Добавить"
                         color={THEME.MAIN_COLOR}
                         onPress={saveHandler}
                         disabled={!text || !title}

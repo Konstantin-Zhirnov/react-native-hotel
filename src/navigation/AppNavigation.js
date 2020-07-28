@@ -14,7 +14,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toggleBooked } from '../store/actions/post'
 
 
@@ -60,7 +60,7 @@ const CreateNavigator = () => {
             }}>
             <CreateStack.Screen
                 options={({ navigation }) => ({
-                    headerTitle: 'Добавить пост',
+                    headerTitle: 'Добавить номер',
                     headerLeft: () => (
                         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
                             <Item
@@ -83,29 +83,37 @@ const Stack = createStackNavigator()
 const AppNavigation = () => {
 
     const dispatch = useDispatch()
-   
-    const toggleHandler = (post) => {
-        dispatch(toggleBooked(post))  
+    const [star, setStar] = useState()
+
+    let flag
+
+    const temp = useSelector(state => state.post.isClick)
+
+    useEffect(() => { setStar(flag) }, [temp])
+
+    const toggleHandler = (id) => {
+        dispatch(toggleBooked(id))
+        setStar(prev => !prev)
     }
 
     return (
         <Stack.Navigator
-            initialRouteName="Main"            
+            initialRouteName="Main"
             screenOptions={{
                 headerStyle: {
                     backgroundColor: Platform.OS === 'android' ? THEME.MAIN_COLOR : '#fff'
                 },
                 headerTintColor: Platform.OS === 'android' ? '#fff' : THEME.MAIN_COLOR
             }}>
-            <Stack.Screen name="Main"           
+            <Stack.Screen name="Main"
                 component={MainScreen}
                 options={({ navigation }) => ({
-                    headerTitle: 'Мой блог',
+                    headerTitle: 'Отель «Loft Garden»',
                     headerRight: () => (
                         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
                             <Item
                                 title="Take photo"
-                                iconName="ios-camera"
+                                iconName="ios-create"
                                 onPress={() => navigation.navigate('Create')}
                             />
                         </HeaderButtons>
@@ -119,7 +127,7 @@ const AppNavigation = () => {
                             />
                         </HeaderButtons>
                     ),
-                })}                
+                })}
             />
             <Stack.Screen
                 options={({ route }) => {
@@ -131,8 +139,9 @@ const AppNavigation = () => {
                             <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
                                 <Item
                                     title="Take star"
-                                    iconName={route.params.postBooked ? 'ios-star' : 'ios-star-outline'}
-                                    onPress={() => toggleHandler(route.params.post)}
+                                    // iconName={route.params.postBooked ? 'ios-star' : 'ios-star-outline'}
+                                    iconName={star ? 'ios-star' : 'ios-star-outline'}
+                                    onPress={() => toggleHandler(route.params.postId)}
                                 />
                             </HeaderButtons>
                         ),
@@ -147,11 +156,15 @@ const AppNavigation = () => {
 
 const BookedStack = createStackNavigator()
 const BookedNavigator = () => {
+
     const dispatch = useDispatch()
-    const toggleHandler = (post) => {
-        dispatch(toggleBooked(post))
-        dispatch(loadPosts())
+    const [star, setStar] = useState(true)
+
+    const toggleHandler = (id) => {
+        dispatch(toggleBooked(id))
+        setStar(prev => !prev)
     }
+
     return (
         <BookedStack.Navigator
             screenOptions={{
@@ -176,15 +189,15 @@ const BookedNavigator = () => {
                 name="Booked"
                 component={BookedScreen} />
             <BookedStack.Screen
-                options={({ route }) => ({                   
+                options={({ route }) => ({
                     headerTitle: route.params.postTitle,
                     headerRight: () => (
                         <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
                             <Item
                                 title="Take photo"
-                                iconName={route.params.postBooked ? 'ios-star' : 'ios-star-outline'}
-                                // iconName={star ? 'ios-star' : 'ios-star-outline'}
-                                onPress={() => toggleHandler(route.params.post)}
+                                // iconName={route.params.postBooked ? 'ios-star' : 'ios-star-outline'}
+                                iconName={star ? 'ios-star' : 'ios-star-outline'}
+                                onPress={() => toggleHandler(route.params.postId)}
                             />
                         </HeaderButtons>
                     ),
@@ -264,7 +277,7 @@ export function MainNavigator() {
                 />
                 <Drawer.Screen
                     options={{
-                        drawerLabel: 'Добавить пост'
+                        drawerLabel: 'Добавить номер'
                     }}
                     name="Create"
                     component={CreateNavigator}

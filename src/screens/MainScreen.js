@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { Post } from '../components/Post'
 import { loadPosts, setIsClick } from '../store/actions/post';
-import { THEME } from '../theme';
 
 
 export const MainScreen = ({ navigation }) => {
@@ -28,13 +27,6 @@ export const MainScreen = ({ navigation }) => {
     const allPosts = useSelector(state => state.post.allPosts)
     const loading = useSelector(state => state.post.loading)
 
-    if (loading) {
-        return (
-            <View style={styles.center}>
-                <ActivityIndicator color={THEME.MAIN_COLOR} size={24} />
-            </View>
-        )
-    }
 
     if (allPosts.length === 0) {
         return (
